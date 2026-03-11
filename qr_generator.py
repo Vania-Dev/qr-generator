@@ -279,9 +279,9 @@ class StylizedQRGenerator:
         draw.polygon(points, fill=color)
 
 # Example usage and demonstrations
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # Create generator instance
-    generator = StylizedQRGenerator()
+    # generator = StylizedQRGenerator()
     
     # Example 1: Basic QR code with default square modules
     # generator.generate_qr("https://example.com", output_path="basic_qr.png")
@@ -291,30 +291,10 @@ if __name__ == "__main__":
     #                     back_color='#4ECDC4', output_path="colored_qr.png")
     
     # Example 3: Diamond-shaped modules with red finder patterns
-    generator.generate_qr("https://ivancastaneda.super.site", 
-                         fill_color='#1E3A8A',        # Blue diamonds
-                         back_color='white',           # White background
-                         center_image="images/VaniaDev.png",  # Logo in center
-                         module_shape='diamond',       # Diamond-shaped data modules
-                         finder_color='#DC2626',       # Red corner squares
-                         output_path="VaniaDev_QR.png")
-    
-    # Example 4: Hexagon-shaped modules with contrasting colors
-    generator.generate_qr("https://pythoncdmx.org", 
-                         fill_color='#059669',         # Green hexagons
-                         back_color='black',           # Black background
-                         center_image="images/pythoncdmx.png",  # Logo in center
-                         module_shape='hexagon',       # Hexagon-shaped data modules
-                         finder_color='#DC2626',       # Red corner squares
-                         output_path="PythonCDMX_QR.png")
-    
-    # Example 5: Rounded-shaped modules with contrasting colors
-    generator.generate_qr("https://github.com/Vania-Dev/AWS-Exam-Qustons-AI-Local", 
-                         fill_color='black',         # black rounded
-                         back_color='white',           # White background
-                         center_image="images/github.png",  # Logo in center
-                         module_shape='rounded',       # Rounded-shaped data modules
-                         finder_color='#DC2626',       # Red corner squares
-                         output_path="MyRepo_QR.png")
-    
-    print("QR codes generated successfully!")
+    # generator.generate_qr("https://google.com", 
+    #                      fill_color='#1E3A8A',        # Blue diamonds
+    #                      back_color='white',           # White background
+    #                      center_image="",  # Logo in center
+    #                      module_shape='diamond',       # Diamond-shaped data modules
+    #                      finder_color='#DC2626',       # Red corner squares
+    #                      output_path="VaniaDev_QR.png")
