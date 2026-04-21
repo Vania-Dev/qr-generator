@@ -146,7 +146,7 @@ def create_shape_preview(shape, color):
     size = 100
     img = Image.new('RGB', (size, size), 'white')
     draw = ImageDraw.Draw(img)
-    
+
     if shape == "square":
         draw.rectangle([20, 20, 80, 80], fill=color)
     elif shape == "diamond":
@@ -159,7 +159,7 @@ def create_shape_preview(shape, color):
         points = [(cx + radius * math.cos(math.pi / 3 * i - math.pi / 6),
                    cy + radius * math.sin(math.pi / 3 * i - math.pi / 6)) for i in range(6)]
         draw.polygon(points, fill=color)
-    
+
     return img
 
 def create_color_preview(fill_color, finder_color, back_color, module_shape):
@@ -168,17 +168,17 @@ def create_color_preview(fill_color, finder_color, back_color, module_shape):
     size = 150
     img = Image.new('RGB', (size, size), back_color)
     draw = ImageDraw.Draw(img)
-    
+
     # Finder pattern preview (corner)
     draw.rounded_rectangle([10, 10, 50, 50], radius=5, fill=finder_color)
     draw.rounded_rectangle([18, 18, 42, 42], radius=3, fill=back_color)
     draw.rounded_rectangle([23, 23, 37, 37], radius=2, fill=finder_color)
-    
+
     # Data modules preview with selected shape
     for i in range(3):
         for j in range(3):
             x, y = 70 + i * 25, 20 + j * 25
-            
+
             if module_shape == "square":
                 draw.rectangle([x, y, x + 18, y + 18], fill=fill_color)
             elif module_shape == "diamond":
@@ -191,7 +191,7 @@ def create_color_preview(fill_color, finder_color, back_color, module_shape):
                 points = [(cx + radius * math.cos(math.pi / 3 * k - math.pi / 6),
                            cy + radius * math.sin(math.pi / 3 * k - math.pi / 6)) for k in range(6)]
                 draw.polygon(points, fill=fill_color)
-    
+
     return img
 
 st.title("⚡ QR Code Generator")
@@ -202,12 +202,12 @@ col1, col2 = st.columns([1, 1])
 with col1:
     #st.markdown('<div class="config-box">', unsafe_allow_html=True)
     st.markdown("### ⚙️ Configuration")
-    
+
     data = st.text_input("🔗 Enter URL or Text", placeholder="https://example.com", label_visibility="visible")
-    
+
     st.markdown("#### 🔷 Choose Module Shape")
     col_shape1, col_shape2, col_shape3, col_shape4 = st.columns(4)
-    
+
     with col_shape1:
         if st.button("⬜\n\nSquare", width="stretch", key="square"):
             st.session_state.module_shape = "square"
@@ -220,16 +220,16 @@ with col1:
     with col_shape4:
         if st.button("⬡\n\nHexagon", width="stretch", key="hexagon"):
             st.session_state.module_shape = "hexagon"
-    
+
     if 'module_shape' not in st.session_state:
         st.session_state.module_shape = "square"
     if 'generated_qr' not in st.session_state:
         st.session_state.generated_qr = None
     if 'qr_filename' not in st.session_state:
         st.session_state.qr_filename = None
-    
+
     st.markdown("#### 🎨 Customize Colors")
-    
+
     col_a, col_b, col_c = st.columns(3)
     with col_a:
         fill_color = st.color_picker("Fill Color", "#000000")
@@ -237,26 +237,26 @@ with col1:
         finder_color = st.color_picker("Finder Color", "#000000")
     with col_c:
         back_color = st.color_picker("Background", "#FFFFFF")
-    
+
     st.markdown("#### 👁️ Live Preview")
     col_prev1, col_prev2 = st.columns(2)
-    
+
     with col_prev1:
         st.markdown('<p class="preview-label">Shape Preview</p>', unsafe_allow_html=True)
         shape_preview = create_shape_preview(st.session_state.module_shape, fill_color)
         st.image(shape_preview, width=100)
-    
+
     with col_prev2:
         st.markdown('<p class="preview-label">Color Scheme</p>', unsafe_allow_html=True)
         color_preview = create_color_preview(fill_color, finder_color, back_color, st.session_state.module_shape)
         st.image(color_preview, width=150)
-    
+
     uploaded_file = st.file_uploader("📤 Upload Center Logo (Optional)", type=['png', 'jpg', 'jpeg', 'gif'])
-    
+
     filename = st.text_input("📄 Filename", "qr_code.png")
-    
+
     generate_btn = st.button("🚀 Generate QR Code", type="primary", width="stretch")
-    
+
     if generate_btn:
         if not data:
             st.error("⚠️ Please enter data to encode")
@@ -264,23 +264,23 @@ with col1:
             with st.spinner("Generating QR code..."):
                 output_folder = "output"
                 os.makedirs(output_folder, exist_ok=True)
-                
+
                 center_image_path = None
                 if uploaded_file:
                     temp_path = os.path.join(output_folder, "temp_logo.png")
                     with open(temp_path, "wb") as f:
                         f.write(uploaded_file.getbuffer())
                     center_image_path = temp_path
-                
+
                 output_path = os.path.join(output_folder, filename)
-                
+
                 shape_map = {
                     "square": "square",
                     "diamond": "diamond",
                     "rounded": "rounded",
                     "hexagon": "hexagon"
                 }
-                
+
                 generator = StylizedQRGenerator()
                 generator.generate_qr(
                     data=data,
@@ -291,25 +291,25 @@ with col1:
                     module_shape=shape_map[st.session_state.module_shape],
                     finder_color=finder_color
                 )
-                
+
                 st.session_state.generated_qr = output_path
                 st.session_state.qr_filename = filename
-                
+
                 if center_image_path and os.path.exists(temp_path):
                     os.remove(temp_path)
-    
+
     st.markdown('</div>', unsafe_allow_html=True)
 
 with col2:
     #st.markdown('<div class="preview-box">', unsafe_allow_html=True)
     st.markdown("### 🖼️ Your QR Code")
-    
+
     if st.session_state.generated_qr and os.path.exists(st.session_state.generated_qr):
         st.success(f"✅ QR code generated successfully!")
-        
+
         qr_image = Image.open(st.session_state.generated_qr)
         st.image(qr_image, width="stretch")
-        
+
         with open(st.session_state.generated_qr, "rb") as file:
             st.download_button(
                 label="⬇️ Download QR Code",
@@ -324,7 +324,7 @@ with col2:
             <p style='color: #a0a0c0; font-size: 1.2rem; margin-bottom: 40px;'>👈 Configure your settings and generate your QR</p>
         </div>
         """, unsafe_allow_html=True)
-        
+
         col_f1, col_f2 = st.columns(2)
         with col_f1:
             st.markdown("""
@@ -339,7 +339,7 @@ with col2:
                 <div class='feature-text'>Logo Support<br/>Add your brand to the center</div>
             </div>
             """, unsafe_allow_html=True)
-        
+
         with col_f2:
             st.markdown("""
             <div class='feature-card'>
@@ -353,7 +353,7 @@ with col2:
                 <div class='feature-text'>Instant Generation<br/>Fast and high quality</div>
             </div>
             """, unsafe_allow_html=True)
-    
+
     st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("""

@@ -15,7 +15,7 @@
 
   <h3 align="center">Create your own QR Code</h3>
 
-  <a href="https://www.youtube.com/@vaniadev">
+  <a href="https://youtu.be/YHjJhJEK4HU">
     <img src="images/video.png" alt="Logo" style="height: 60%; width:60%;">
   </a>
 
